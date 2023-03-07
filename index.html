@@ -14,15 +14,7 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_zOULy0QGDGfyVsWTI1xzteLH3-eipQI"></script>
-    <script>
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 8,
-          center: { lat: 37.7749, lng: -122.4194 },
-        });
-        map.setOptions({ draggable: true });
-      }
-    </script>
+    <script src="map.js"></script>
   </head>
   <body onload="initMap()">
     <div id="map"></div>
