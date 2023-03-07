@@ -11,19 +11,24 @@
   <body onload="initMap()">
     <header class="h-32 bg-blue-400">
       <h1>Concert Compass</h1>
-      <div class="bg-slate-200 mt-12">
+      <div class="mt-12">
         <div class="flex justify-center">
           <input placeholder="Zip Code" />
           <input type="date" />
-          <input class="w-72" placeholder="Search for artists, venues and events" />
+          <input
+            class="w-72"
+            placeholder="Search for artists, venues and events"
+          />
           <button id="eventSearch" class="bg-red-200">Search</button>
         </div>
       </div>
     </header>
-    <div class="">
-      <h2>Search Results</h2>
+    <div class="main-container grid grid-flow-col grid-cols-6">
+      <div class="col-span-2">
+        <h2>Search Results</h2>
+      </div>
+      <div class="min-h-screen col-span-6" id="map"></div>
     </div>
-    <div id="map"></div>
     <script rel="script" href="./Assets/script.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_zOULy0QGDGfyVsWTI1xzteLH3-eipQI"></script>
     <script src="./Assets/map.js"></script>
