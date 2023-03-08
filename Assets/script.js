@@ -7,3 +7,5 @@ function initMap() {
 
     console.log("MAP");
   }
+
+  
