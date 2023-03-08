@@ -9,10 +9,12 @@ searchBtn.addEventListener('click', function(event) {
   resultsPanel.classList.remove('hidden');
 });
 
+//Prevent page refresh when clicking search button
 form.addEventListener('submit', function(event) {
   event.preventDefault();
 });
 
+//Adds an event listener to the window to detect changes in screen size for search bar
 window.addEventListener('resize', function() {
   if (window.innerWidth <= 768) {
     input.style.maxWidth = 'none';
