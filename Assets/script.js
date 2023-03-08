@@ -1,3 +1,11 @@
+const searchBtn = document.getElementById('search-btn');
+const resultsPanel = document.getElementById('results-panel');
+
+searchBtn.addEventListener('click', function(event) {
+  event.preventDefault(); 
+  resultsPanel.classList.remove('hidden');
+});
+
 function initMap() {
     var map = new google.maps.Map(document.getElementById("map"), {
       zoom: 8,
@@ -8,4 +16,3 @@ function initMap() {
     console.log("MAP");
   }
 
-  
