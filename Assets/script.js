@@ -4,14 +4,27 @@ const button = document.querySelector('button[type="submit"]');
 const searchBtn = document.getElementById('search-btn');
 const resultsPanel = document.getElementById('results-panel');
 
+//API Key and Fetch 
+var apiKey = '4DJQxPvpSPGeMrCtu9Fp7KRGgUXNuUrf';
+var city;
+var postalCode;
+var date;
+
+const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&postalCode=${postalCode}&startDateTime=${date}T00:00:00Z&endDateTime=${date}T23:59:59Z`;
+
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log(`Found ${data.page.totalElements} events in ${city}, ${postalCode} on ${data._embedded.events[0].dates.start.localDate}`);
+    data._embedded.events.forEach(event => {
+      console.log(`- ${event.name} at ${event._embedded.venues[0].name}`);
+    });
+  })
+  .catch(error => console.error(error));
+
 searchBtn.addEventListener('click', function(event) {
   event.preventDefault(); 
   resultsPanel.classList.remove('hidden');
-});
-
-//Prevent page refresh when clicking search button
-form.addEventListener('submit', function(event) {
-  event.preventDefault();
 });
 
 //Adds an event listener to the window to detect changes in screen size for search bar
