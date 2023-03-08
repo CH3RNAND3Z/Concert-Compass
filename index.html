@@ -16,22 +16,24 @@
   </head>
   <body onload="initMap()">
     <header class="h-min bg-gradient-to-r from-slate-600 to-slate-900">
-      <h1 class="text-6xl py-4 text-center text-slate-50">Concert Compass</h1>
+      <h1 class="text-5xl md:text-6xl  py-4 text-center text-slate-50">Concert Compass</h1>
+
+      <!-- <h1 class="text-6xl py-4 text-center text-slate-50">Concert Compass</h1> -->
       <!-- START Search Bar -->
       <div class="pb-4">
         <form class="flex justify-center">
-          <!-- Zip Code search input -->
-          <div class="relative border-r">
+          <!-- City search input -->
+          <div class="relative">
             <input
-              class="block w-32 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-l-lg"
-              type="text"
-              name="zip"
-              id="zip"
-              placeholder="Zip Code"
+              class="block w-full sm:w-80 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-lg"
+              type="search"
+              name="city"
+              id="city"
+              placeholder="City"
             />
           </div>
           <!-- Date search input -->
-          <div class="relative border-r">
+          <!-- <div class="relative border-r">
             <input
               class="block w-32 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
               type="date"
@@ -39,9 +41,9 @@
               id="date"
               placeholder="Date"
             />
-          </div>
+          </div> -->
           <!-- Main search input: Artist, venues and events -->
-          <div class="relative">
+          <!-- <div class="relative">
             <input
               class="block w-80 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-r-lg"
               type="text"
@@ -49,11 +51,11 @@
               id="query"
               placeholder="Search for artists, venues and events"
             />
-          </div>
+          </div> -->
           <!-- Search Button -->
           <div class="relative ml-4">
             <button
-              class="inline-flex items-center justify-center h-10 px-6 font-medium tracking-wide text-white transition duration-200 bg-red-600 hover:bg-red-700 focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-lg"
+              class="inline-flex items-center justify-center h-10 px-6 font-medium tracking-wide text-white transition duration-200 bg-red-600 hover:bg-red-700  rounded-lg"
               type="submit"
               id="search-btn"
             >
