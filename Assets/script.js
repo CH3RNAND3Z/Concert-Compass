@@ -9,10 +9,9 @@ searchBtn.addEventListener('click', function(event) {
   resultsPanel.classList.remove('hidden');
 });
 
-/*form.addEventListener('submit', function(event) {
+form.addEventListener('submit', function(event) {
   event.preventDefault();
-  // Do the search here
-});*/
+});
 
 window.addEventListener('resize', function() {
   if (window.innerWidth <= 768) {
