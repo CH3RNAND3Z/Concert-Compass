@@ -13,3 +13,7 @@ body {
 h1 {
   font-family: "Bebas Neue", cursive;
 }
+
+a {
+  margin-top: 1rem;
+}
