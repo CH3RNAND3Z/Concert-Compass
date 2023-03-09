@@ -22,7 +22,7 @@ searchBtn.addEventListener("click", function (event) {
 });
 
 function searchTicketmasterApi(cityInput) {
-  var apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=date,asc&size=5`;
+  var apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=5`;
 
   fetch(apiUrl)
     .then((response) => response.json())
