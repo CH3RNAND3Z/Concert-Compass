@@ -56,7 +56,7 @@ function searchTicketmasterApi(cityInput) {
           "December",
         ];
         const suffixes = ["th", "st", "nd", "rd"];
-        const day = eventDate.getDate();
+        const day = 1 + eventDate.getDate();
         const suffix =
           suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
         const formattedDate = `${
