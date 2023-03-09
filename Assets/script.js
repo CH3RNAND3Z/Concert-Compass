@@ -21,6 +21,30 @@ searchBtn.addEventListener("click", function (event) {
   // populateGoogleMaps(cityInput);
 });
 
+function formatDate(eventDate) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const suffixes = ["th", "st", "nd", "rd"];
+  const day = 1 + eventDate.getDate();
+  const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
+  const formattedDate = `${
+    monthNames[eventDate.getMonth()]
+  } ${day}${suffix}, ${eventDate.getFullYear()}`;
+  return formattedDate;
+}
+
 function searchTicketmasterApi(cityInput) {
   var apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=5`;
 
@@ -40,28 +64,7 @@ function searchTicketmasterApi(cityInput) {
         const eventImage = event.images[0].url;
         const eventUrl = event.url;
 
-        // Format the date
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-        const suffixes = ["th", "st", "nd", "rd"];
-        const day = 1 + eventDate.getDate();
-        const suffix =
-          suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-        const formattedDate = `${
-          monthNames[eventDate.getMonth()]
-        } ${day}${suffix}, ${eventDate.getFullYear()}`;
+        const formattedDate = formatDate(eventDate);
 
         const eventCard = document.createElement("div");
         eventCard.classList.add(
