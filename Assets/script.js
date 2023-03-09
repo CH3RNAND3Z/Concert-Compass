@@ -21,7 +21,6 @@ searchBtn.addEventListener("click", function (event) {
   // populateGoogleMaps(cityInput);
 });
 
-
 function searchTicketmasterApi(cityInput) {
   var apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=date,asc&size=5`;
 
@@ -108,6 +107,7 @@ function searchTicketmasterApi(cityInput) {
         );
         purchaseTicketsBtn.textContent = "Purchase Tickets";
         purchaseTicketsBtn.href = eventUrl;
+        purchaseTicketsBtn.target = "_blank";
         eventCard.appendChild(purchaseTicketsBtn);
 
         resultsContainer.appendChild(eventCard);
