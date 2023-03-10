@@ -131,5 +131,5 @@ function initMap() {
   });
   map.setOptions({ draggable: true });
 
-  console.log("MAP");
+  console.log("map info: ", map);
 }
