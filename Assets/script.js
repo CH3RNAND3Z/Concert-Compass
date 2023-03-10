@@ -96,7 +96,7 @@ function createEventCard(event) {
 }
 
 function searchTicketmasterApi(cityInput) {
-  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=5`;
+  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=25`;
 
   fetch(apiUrl)
     .then((response) => response.json())
@@ -161,14 +161,18 @@ function populateGoogleMaps(data) {
     });
   });
 }
-  // for (var i = 0; i < json.page.size; i++) {
-  //   addMarker(map, json._embedded.events[i]);
-  // }
-  var marker = new google.maps.Marker({
-    position: { lat: cityLat, lng: cityLong },
-    map: map,
-    title: "Event Title",
-  });
+
+addEventListener("click", function () {
+  for (let i = 0; i < venues.length; i++) {
+    let marker = new google.maps.Marker({
+      position: venues[i].location,
+      map: map,
+    });
+  }
+});
+// for (var i = 0; i < json.page.size; i++) {
+//   addMarker(map, json._embedded.events[i]);
+// }
 
 // function addMarker(map, event) {
 //   var marker = new google.maps.Marker({
