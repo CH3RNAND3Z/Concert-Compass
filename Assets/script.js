@@ -1,5 +1,7 @@
 const searchBtn = document.getElementById("search-btn");
 const resultsContainer = document.getElementById("results-container");
+const modal = document.getElementById("popup-modal");
+const closeModalBtn = document.getElementById("close-modal-btn");
 
 const apiKey = "S3hkm2FnFATqM68Z3lvSHRxUVozGGlHX";
 
@@ -46,15 +48,12 @@ function formatDate(eventDate) {
 }
 
 // Get the modal element
-var modal = document.getElementById("popup-modal");
 
-// Close the modal when the user clicks on the close button or anywhere outside of the modal
-// TODO: this needs to be edited. Just a basic way to close the modal window for now.
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.classList.add("hidden");
-  }
-};
+
+// Close modal on closeModalBtn click
+closeModalBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
 
 function createEventCard(event) {
   const eventName = event.name;
