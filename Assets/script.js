@@ -140,14 +140,27 @@ function initMap() {
 // }
 
 function populateGoogleMaps(data) {
-  let cityLat = JSON.parse(data._embedded.events[0]._embedded.venues[0].location.latitude);
-  let cityLong = JSON.parse(data._embedded.events[0]._embedded.venues[0].location.longitude);
+  let events = data._embedded.events;
+  let cityLat = JSON.parse(events[0]._embedded.venues[0].location.latitude);
+  let cityLong = JSON.parse(events[0]._embedded.venues[0].location.longitude);
   console.log(cityLat, cityLong);
   var mapDiv = document.getElementById("map");
   var map = new google.maps.Map(mapDiv, {
     center: { lat: cityLat, lng: cityLong },
-    zoom: 8,
+    zoom: 10,
   });
+
+  events.forEach((event) => {
+    const venue = event._embedded.venues[0];
+    const venueLat = JSON.parse(venue.location.latitude);
+    const venueLong = JSON.parse(venue.location.longitude);
+    const marker = new google.maps.Marker({
+      position: { lat: venueLat, lng: venueLong },
+      map: map,
+      title: venue.name,
+    });
+  });
+}
   // for (var i = 0; i < json.page.size; i++) {
   //   addMarker(map, json._embedded.events[i]);
   // }
@@ -156,7 +169,6 @@ function populateGoogleMaps(data) {
     map: map,
     title: "Event Title",
   });
-}
 
 // function addMarker(map, event) {
 //   var marker = new google.maps.Marker({
