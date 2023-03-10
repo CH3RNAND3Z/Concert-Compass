@@ -144,7 +144,6 @@ function populateGoogleMaps(data) {
   let cityLong = JSON.parse(data._embedded.events[0]._embedded.venues[0].location.longitude);
   console.log(cityLat, cityLong);
   var mapDiv = document.getElementById("map");
-  mapDiv.classList.add("col-span-4");
   var map = new google.maps.Map(mapDiv, {
     center: { lat: cityLat, lng: cityLong },
     zoom: 8,
@@ -152,6 +151,11 @@ function populateGoogleMaps(data) {
   // for (var i = 0; i < json.page.size; i++) {
   //   addMarker(map, json._embedded.events[i]);
   // }
+  var marker = new google.maps.Marker({
+    position: { lat: cityLat, lng: cityLong },
+    map: map,
+    title: "Event Title",
+  });
 }
 
 // function addMarker(map, event) {

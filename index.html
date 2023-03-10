@@ -8,14 +8,17 @@
     <link rel="stylesheet" href="./Assets/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
     <title>Concert Compass</title>
   </head>
   <body onload="initMap()">
     <header class="h-min bg-gradient-to-r from-slate-600 to-slate-900">
-      <h1 class="text-5xl md:text-6xl py-4 text-center text-slate-50">Concert Compass</h1>
-
-      <!-- <h1 class="text-6xl py-4 text-center text-slate-50">Concert Compass</h1> -->
+      <h1 class="text-5xl md:text-6xl py-4 text-center text-slate-50">
+        Concert Compass
+      </h1>
       <!-- START Search Bar -->
       <div class="pb-4">
         <form class="flex justify-center">
@@ -29,26 +32,7 @@
               placeholder="City"
             />
           </div>
-          <!-- Date search input -->
-          <!-- <div class="relative border-r">
-            <input
-              class="block w-32 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
-              type="date"
-              name="date"
-              id="date"
-              placeholder="Date"
-            />
-          </div> -->
-          <!-- Main search input: Artist, venues and events -->
-          <!-- <div class="relative">
-            <input
-              class="block w-80 h-10 p-4 bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-r-lg"
-              type="text"
-              name="query"
-              id="query"
-              placeholder="Search for artists, venues and events"
-            />
-          </div> -->
+
           <!-- Search Button -->
           <div class="relative ml-4">
             <button
@@ -64,16 +48,21 @@
       <!-- /END Search Bar -->
     </header>
     <!-- START Main Section -->
-    <div class="main-container grid grid-flow-col grid-cols-6">
+    <div
+      id="main-container"
+      class="main-container h-screen grid grid-flow-col grid-cols-6"
+    >
       <!-- START Results side panel -->
-      <div id="results-container" class="col-span-2 hidden">
+      <div id="results-container" class="col-span-2 hidden overflow-y-scroll">
         <div class="grid grid-cols-1 gap-4"></div>
       </div>
-      <div class="min-h-screen col-span-6" id="map"></div>
+      <div class="col-span-6" id="map"></div>
       <!-- /END Results side panel -->
     </div>
     <!-- /END Main Section -->
-    <footer class="h-24 bg-gradient-to-r from-slate-600 to-slate-900 flex items-center justify-center">
+    <footer
+      class="h-24 bg-gradient-to-r from-slate-600 to-slate-900 flex items-center justify-center"
+    >
       <p class="text-slate-50">Concert Compass &copy; 2023</p>
     </footer>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_zOULy0QGDGfyVsWTI1xzteLH3-eipQI"></script>
