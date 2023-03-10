@@ -105,7 +105,7 @@ function createEventCard(event) {
 }
 
 function searchTicketmasterApi(cityInput) {
-  var apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=5`;
+  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=5`;
 
   fetch(apiUrl)
     .then((response) => response.json())
@@ -125,7 +125,7 @@ function searchTicketmasterApi(cityInput) {
 }
 
 function initMap() {
-  var map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 8,
     center: { lat: 37.7749, lng: -122.4194 },
   });
