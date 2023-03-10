@@ -49,6 +49,7 @@ function formatDate(eventDate) {
 var modal = document.getElementById("popup-modal");
 
 // Close the modal when the user clicks on the close button or anywhere outside of the modal
+// TODO: this needs to be edited. Just a basic way to close the modal window for now. 
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.classList.add("hidden");
