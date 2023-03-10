@@ -12,7 +12,7 @@ searchBtn.addEventListener("click", function (event) {
   let cityInput = document.getElementById("city").value;
 
   if (!cityInput) {
-    console.error("You need to enter a zip code!");
+    console.error("You need to enter a valid city!");
     return;
   }
 
@@ -39,9 +39,7 @@ function formatDate(eventDate) {
   const suffixes = ["th", "st", "nd", "rd"];
   const day = 1 + eventDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${
-    monthNames[eventDate.getMonth()]
-  } ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
 
@@ -55,14 +53,7 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add(
-    "rounded-lg",
-    "overflow-hidden",
-    "shadow-md",
-    "p-6",
-    "bg-white",
-    "mt-6"
-  );
+  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6");
 
   const eventImageEl = document.createElement("img");
   eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2");
@@ -120,9 +111,17 @@ function searchTicketmasterApi(cityInput) {
         const eventCard = createEventCard(event);
         resultsContainer.appendChild(eventCard);
       });
+      populateGoogleMaps(data);
     })
     .catch((error) => console.log(error));
 }
+
+// document.addEventListener("DOMContentLoaded", function () {
+//   let lastCitySearched = localStorage.getItem("city");
+//   console.log(lastCitySearched);
+//   searchTicketmasterApi(lastCitySearched);
+//   console.log("Last searched city: " + lastCitySearched);
+// });
 
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
@@ -133,3 +132,36 @@ function initMap() {
 
   console.log("map info: ", map);
 }
+
+// function showEvents(json) {
+//   for (var i = 0; i < json.page.size; i++) {
+//     $("#events").append("<p>" + json._embedded.events[i].name + "</p>");
+//   }
+// }
+
+function populateGoogleMaps(data) {
+  let cityLat = JSON.parse(data._embedded.events[0]._embedded.venues[0].location.latitude);
+  let cityLong = JSON.parse(data._embedded.events[0]._embedded.venues[0].location.longitude);
+  console.log(cityLat, cityLong);
+  var mapDiv = document.getElementById("map");
+  mapDiv.classList.add("col-span-4");
+  var map = new google.maps.Map(mapDiv, {
+    center: { lat: cityLat, lng: cityLong },
+    zoom: 8,
+  });
+  // for (var i = 0; i < json.page.size; i++) {
+  //   addMarker(map, json._embedded.events[i]);
+  // }
+}
+
+// function addMarker(map, event) {
+//   var marker = new google.maps.Marker({
+//     position: new google.maps.LatLng(
+//       event._embedded.venues[0].location.latitude,
+//       event._embedded.venues[0].location.longitude
+//     ),
+//     map: map,
+//   });
+//   marker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+//   console.log(marker);
+// }
