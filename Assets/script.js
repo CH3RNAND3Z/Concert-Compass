@@ -152,6 +152,12 @@ function populateGoogleMaps(data) {
   // for (var i = 0; i < json.page.size; i++) {
   //   addMarker(map, json._embedded.events[i]);
   // }
+  var marker = new google.maps.Marker({
+    position: {lat: cityLat, lng: cityLong},
+    map: map,
+    title: "Event Title"
+});
+
 }
 
 // function addMarker(map, event) {
