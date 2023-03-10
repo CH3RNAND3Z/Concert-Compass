@@ -49,7 +49,7 @@ function formatDate(eventDate) {
 var modal = document.getElementById("popup-modal");
 
 // Close the modal when the user clicks on the close button or anywhere outside of the modal
-// TODO: this needs to be edited. Just a basic way to close the modal window for now. 
+// TODO: this needs to be edited. Just a basic way to close the modal window for now.
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.classList.add("hidden");
@@ -185,17 +185,26 @@ function populateGoogleMaps(data) {
       map: map,
       title: venue.name,
     });
+
+    // add onclick function to marker
+    marker.addListener("click", () => {
+      console.log("Marker clicked!");
+      // add functionality here. Just gonna add remove hidden class for now.
+      modal.classList.remove("hidden");
+    });
   });
 }
 
-addEventListener("click", function () {
-  for (let i = 0; i < venues.length; i++) {
-    let marker = new google.maps.Marker({
-      position: venues[i].location,
-      map: map,
-    });
-  }
-});
+// addEventListener("click", function (data) {
+
+//   for (let i = 0; i < 25; i++) {
+//     let marker = new google.maps.Marker({
+//       position: { lat: venueLat[i], lng: venueLong[i] },
+//       map: map,
+//     });
+//   }
+// });
+
 // for (var i = 0; i < json.page.size; i++) {
 //   addMarker(map, json._embedded.events[i]);
 // }
