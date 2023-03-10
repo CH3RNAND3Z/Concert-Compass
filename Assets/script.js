@@ -39,9 +39,22 @@ function formatDate(eventDate) {
   const suffixes = ["th", "st", "nd", "rd"];
   const day = 1 + eventDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${
+    monthNames[eventDate.getMonth()]
+  } ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
+
+// Get the modal element
+var modal = document.getElementById("popup-modal");
+
+// Close the modal when the user clicks on the close button or anywhere outside of the modal
+// TODO: this needs to be edited. Just a basic way to close the modal window for now. 
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.classList.add("hidden");
+  }
+};
 
 function createEventCard(event) {
   const eventName = event.name;
@@ -53,10 +66,23 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6");
+  eventCard.classList.add(
+    "rounded-lg",
+    "overflow-hidden",
+    "shadow-md",
+    "p-6",
+    "bg-white",
+    "mt-6"
+  );
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2");
+  eventImageEl.classList.add(
+    "w-full",
+    "h-52",
+    "object-contain",
+    "mb-2",
+    "event-image"
+  );
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
