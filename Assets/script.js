@@ -1,27 +1,13 @@
+// global selectors
 const searchBtn = document.getElementById("search-btn");
 const resultsContainer = document.getElementById("results-container");
 const modal = document.getElementById("popup-modal");
 const closeModalBtn = document.getElementById("close-modal-btn");
 
+// Ticketmaster API key
 const apiKey = "S3hkm2FnFATqM68Z3lvSHRxUVozGGlHX";
 
-let searchList = [];
-
-searchBtn.addEventListener("click", function (event) {
-  event.preventDefault();
-  // resultsContainer.classList.remove("hidden");
-
-  let cityInput = document.getElementById("city").value;
-
-  if (!cityInput) {
-    console.error("You need to enter a valid city!");
-    return;
-  }
-
-  localStorage.setItem("city", JSON.stringify(cityInput));
-  searchTicketmasterApi(cityInput);
-});
-
+// date formatting
 function formatDate(eventDate) {
   const monthNames = [
     "January",
@@ -44,13 +30,56 @@ function formatDate(eventDate) {
   return formattedDate;
 }
 
-// Get the modal element
+// populate initial map upon page load
+function initMap() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 5,
+    center: { lat: 39.95493, lng: -100.78789 },
+  });
+  map.setOptions({ draggable: true });
 
-// Close modal on closeModalBtn click
-closeModalBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
+  console.log("map info: ", map);
+}
+
+// event listener that kicks off the entire page's functions when search button is clicked
+searchBtn.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  let cityInput = document.getElementById("city").value;
+
+  if (!cityInput) {
+    console.error("You need to enter a valid city!");
+    return;
+  }
+
+  localStorage.setItem("city", JSON.stringify(cityInput));
+  searchTicketmasterApi(cityInput);
 });
 
+// fire off request to Ticketmaster API
+function searchTicketmasterApi(cityInput) {
+  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=25`;
+
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const events = data._embedded.events;
+      console.log(`Found ${events.length} events in ${cityInput}`);
+
+      resultsContainer.classList.remove("hidden");
+      resultsContainer.innerHTML = "";
+
+      events.forEach((event) => {
+        const eventCard = createEventCard(event);
+        resultsContainer.appendChild(eventCard);
+      });
+      populateGoogleMaps(data);
+    })
+    .catch((error) => console.log(error));
+}
+
+// create search result cards based on data received from Ticketmaster API
 function createEventCard(event) {
   const eventName = event.name;
   const eventDate = new Date(event.dates.start.localDate);
@@ -103,45 +132,7 @@ function createEventCard(event) {
   return eventCard;
 }
 
-function searchTicketmasterApi(cityInput) {
-  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${cityInput}&classificationName=music&sort=relevance,desc&size=25`;
-
-  fetch(apiUrl)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const events = data._embedded.events;
-      console.log(`Found ${events.length} events in ${cityInput}`);
-
-      resultsContainer.classList.remove("hidden");
-      resultsContainer.innerHTML = "";
-
-      events.forEach((event) => {
-        const eventCard = createEventCard(event);
-        resultsContainer.appendChild(eventCard);
-      });
-      populateGoogleMaps(data);
-    })
-    .catch((error) => console.log(error));
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  let lastCitySearched = localStorage.getItem("city");
-  console.log(lastCitySearched);
-  searchTicketmasterApi(JSON.parse(lastCitySearched));
-  console.log("Last searched city: " + lastCitySearched);
-});
-
-function initMap() {
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 5,
-    center: { lat: 39.95493, lng: -100.78789 },
-  });
-  map.setOptions({ draggable: true });
-
-  console.log("map info: ", map);
-}
-
+// populate Google Maps with data received from Ticketmaster API
 function populateGoogleMaps(data) {
   let events = data._embedded.events;
   let cityLat = JSON.parse(events[0]._embedded.venues[0].location.latitude);
@@ -153,6 +144,7 @@ function populateGoogleMaps(data) {
     zoom: 12,
   });
 
+  // place markers for each event
   events.forEach((event) => {
     const venue = event._embedded.venues[0];
     const venueLat = JSON.parse(venue.location.latitude);
@@ -163,19 +155,41 @@ function populateGoogleMaps(data) {
       title: venue.name,
     });
 
-    // add onclick function to marker
+    // add onclick function to marker that opens modal
     marker.addListener("click", () => {
-      let eventModalEl = document.getElementById("eventModalEl");
       let venueModalEl = document.getElementById("venueModalEl");
-      let lineupModalEl = document.getElementById("lineupModalEl");
-      let additionalModalEl = document.getElementById("additionalModalEl");
+      let addressModalEl = document.getElementById("addressModalEl");
+      let adaModalEl = document.getElementById("adaModalEl");
+      let parkingModalEl = document.getElementById("parkingModalEl");
+      
+      //clears modal content upon click
+      venueModalEl.textContent = "";
+      addressModalEl.textContent = "";
+      adaModalEl.textContent = "";
+      parkingModalEl.textContent = "";
       console.log("Marker clicked!");
-      // add functionality here. Just gonna add remove hidden class for now.
+
+      // unhides modal and populates with specific venue information
       modal.classList.remove("hidden");
-      eventModalEl.textContent = venue.name;
-      venueModalEl.textContent = venue.name;
-      lineupModalEl.textContent = venue.name;
-      additionalModalEl.textContent = venue.name;
+
+      venueModalEl.textContent = "Welcome to " + venue.name;
+      addressModalEl.textContent =
+        venue.address.line1 + ", " + venue.city.name + " " + venue.state.stateCode + ", " + venue.postalCode;
+      // adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones
+      // parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
     });
   });
 }
+
+// Close modal on closeModalBtn click
+closeModalBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+// upon reload, populate page with last city searched
+document.addEventListener("DOMContentLoaded", function () {
+  let lastCitySearched = localStorage.getItem("city");
+  console.log(lastCitySearched);
+  searchTicketmasterApi(JSON.parse(lastCitySearched));
+  console.log("Last searched city: " + lastCitySearched);
+});
