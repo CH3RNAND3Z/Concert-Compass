@@ -161,7 +161,7 @@ function populateGoogleMaps(data) {
       let addressModalEl = document.getElementById("addressModalEl");
       let adaModalEl = document.getElementById("adaModalEl");
       let parkingModalEl = document.getElementById("parkingModalEl");
-      
+
       //clears modal content upon click
       venueModalEl.textContent = "";
       addressModalEl.textContent = "";
@@ -191,5 +191,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let lastCitySearched = localStorage.getItem("city");
   console.log(lastCitySearched);
   searchTicketmasterApi(JSON.parse(lastCitySearched));
+  document.getElementById("city").value = JSON.parse(lastCitySearched);
   console.log("Last searched city: " + lastCitySearched);
 });
