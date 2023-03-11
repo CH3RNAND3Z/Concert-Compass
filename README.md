@@ -1,6 +1,7 @@
 # Concert Compass
 
 A concert finder powered by:
+
 - Tailwind CSS
 - Google Maps API
 - Ticketmaster API
@@ -9,13 +10,14 @@ A concert finder powered by:
 
 ## Description
 
-We were motivated to create Concert Compass because we feel it is difficult to quickly find upcoming concerts, their locations, and other ancillary information. 
+We were motivated to create Concert Compass because we feel it is difficult to quickly find upcoming concerts, their locations, and other ancillary information.
 
 When using Concert Compass, you'll find:
+
 - a responsive search function that populates a search column with upcoming events
 - links that take you to a ticket purchasing page
 - an interactive map with markers based on venue location
-- modals with venue information (when a marker is clicked) 
+- modals with venue information (when a marker is clicked)
 
 ## Installation
 
@@ -27,7 +29,7 @@ To enjoy this site, type in your city of interest into the search bar. Once the 
 
 Future updates will allow for more search parameters.
 
-![Concert Compass Homepage](assets/images/concert-compass.png)
+![Concert Compass Homepage](./Assets/images/concert-compass.png)
 
 ## Credits
 
