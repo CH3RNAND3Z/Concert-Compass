@@ -69,6 +69,8 @@ function searchTicketmasterApi(cityInput) {
       const events = data._embedded.events;
       console.log(`Found ${events.length} events in ${cityInput}`);
 
+      populateGoogleMaps(data);
+
       resultsContainer.classList.remove("hidden");
       resultsContainer.innerHTML = "";
 
@@ -76,9 +78,8 @@ function searchTicketmasterApi(cityInput) {
         const eventCard = createEventCard(event);
         resultsContainer.appendChild(eventCard);
       });
-      populateGoogleMaps(data);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error(error));
 }
 
 // create search result cards based on data received from Ticketmaster API
@@ -88,11 +89,9 @@ function createEventCard(event) {
   const eventLocation = event._embedded.venues[0].name;
   const eventImage = event.images[0].url;
   const eventUrl = event.url;
-  // *** THIS LINE IS BREAKING OUT MARKER FUNCTION FOR SOME REASON ***
-  // const eventLineup = event._embedded.attractions.map((attraction) => attraction.name).join(', ');
-
-
-
+  const eventLineup = event._embedded.attractions
+    .map((band) => band.name)
+    .join(", ");
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
@@ -123,16 +122,12 @@ function createEventCard(event) {
   eventNameEl.textContent = eventName;
   eventCard.appendChild(eventNameEl);
 
+  // *** ADD LINEUP INFO TO CARD. ****
 
-// *** ADD LINEUP INFO TO CARD. ****
-
-  // const eventLineupEl = document.createElement("p");
-  // eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
-  // eventLineupEl.textContent = `Lineup: ${eventLineup}`;
-  // eventCard.appendChild(eventLineupEl);
-
-
-
+  const eventLineupEl = document.createElement("p");
+  eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
+  eventLineupEl.textContent = `Lineup: ${eventLineup}`;
+  eventCard.appendChild(eventLineupEl);
 
   const eventDateEl = document.createElement("p");
   eventDateEl.classList.add("text-gray-600", "text-base", "mb-2");
