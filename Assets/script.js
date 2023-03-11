@@ -26,7 +26,9 @@ function formatDate(eventDate) {
   const suffixes = ["th", "st", "nd", "rd"];
   const day = 1 + eventDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${
+    monthNames[eventDate.getMonth()]
+  } ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
 
@@ -90,10 +92,23 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6");
+  eventCard.classList.add(
+    "rounded-lg",
+    "overflow-hidden",
+    "shadow-md",
+    "p-6",
+    "bg-white",
+    "mt-6"
+  );
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2", "event-image");
+  eventImageEl.classList.add(
+    "w-full",
+    "h-52",
+    "object-contain",
+    "mb-2",
+    "event-image"
+  );
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
@@ -113,21 +128,47 @@ function createEventCard(event) {
   eventLocationEl.textContent = `Location: ${eventLocation}`;
   eventCard.appendChild(eventLocationEl);
 
+  const lineupBtnContainer = document.createElement("div");
+  lineupBtnContainer.classList.add("flex", "justify-center", "mb-4");
+  eventCard.appendChild(lineupBtnContainer);
+
+  const lineupBtn = document.createElement("a");
+  lineupBtn.classList.add(
+    "w-full",
+    "max-w-xs",
+    "text-center",
+    "bg-gray-500",
+    "hover:bg-gray-600",
+    "text-white",
+    "font-bold",
+    "py-2",
+    "px-2",
+    "rounded"
+  );
+  lineupBtn.textContent = "View Lineup";
+  lineupBtnContainer.appendChild(lineupBtn);
+
+  const purchaseTicketsBtnContainer = document.createElement("div");
+  purchaseTicketsBtnContainer.classList.add("flex", "justify-center", "mb-4");
+  eventCard.appendChild(purchaseTicketsBtnContainer);
+
   const purchaseTicketsBtn = document.createElement("a");
   purchaseTicketsBtn.classList.add(
+    "w-full",
+    "max-w-xs",
+    "text-center",
     "bg-red-500",
     "hover:bg-red-600",
     "text-white",
     "font-bold",
     "py-2",
-    "px-4",
-    "mt-4",
+    "px-2",
     "rounded"
   );
   purchaseTicketsBtn.textContent = "Purchase Tickets";
   purchaseTicketsBtn.href = eventUrl;
   purchaseTicketsBtn.target = "_blank";
-  eventCard.appendChild(purchaseTicketsBtn);
+  purchaseTicketsBtnContainer.appendChild(purchaseTicketsBtn);
 
   return eventCard;
 }
@@ -174,7 +215,13 @@ function populateGoogleMaps(data) {
 
       venueModalEl.textContent = "Welcome to " + venue.name;
       addressModalEl.textContent =
-        venue.address.line1 + ", " + venue.city.name + " " + venue.state.stateCode + ", " + venue.postalCode;
+        venue.address.line1 +
+        ", " +
+        venue.city.name +
+        " " +
+        venue.state.stateCode +
+        ", " +
+        venue.postalCode;
       // adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones
       // parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
     });
