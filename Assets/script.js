@@ -9,7 +9,7 @@ let searchList = [];
 
 searchBtn.addEventListener("click", function (event) {
   event.preventDefault();
-  resultsContainer.classList.remove("hidden");
+  // resultsContainer.classList.remove("hidden");
 
   let cityInput = document.getElementById("city").value;
 
@@ -20,7 +20,6 @@ searchBtn.addEventListener("click", function (event) {
 
   localStorage.setItem("city", JSON.stringify(cityInput));
   searchTicketmasterApi(cityInput);
-  // populateGoogleMaps(cityInput);
 });
 
 function formatDate(eventDate) {
@@ -41,14 +40,11 @@ function formatDate(eventDate) {
   const suffixes = ["th", "st", "nd", "rd"];
   const day = 1 + eventDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${
-    monthNames[eventDate.getMonth()]
-  } ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
 
 // Get the modal element
-
 
 // Close modal on closeModalBtn click
 closeModalBtn.addEventListener("click", () => {
@@ -65,23 +61,10 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add(
-    "rounded-lg",
-    "overflow-hidden",
-    "shadow-md",
-    "p-6",
-    "bg-white",
-    "mt-6"
-  );
+  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6");
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add(
-    "w-full",
-    "h-52",
-    "object-contain",
-    "mb-2",
-    "event-image"
-  );
+  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2", "event-image");
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
@@ -130,6 +113,7 @@ function searchTicketmasterApi(cityInput) {
       const events = data._embedded.events;
       console.log(`Found ${events.length} events in ${cityInput}`);
 
+      resultsContainer.classList.remove("hidden");
       resultsContainer.innerHTML = "";
 
       events.forEach((event) => {
@@ -141,12 +125,12 @@ function searchTicketmasterApi(cityInput) {
     .catch((error) => console.log(error));
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   let lastCitySearched = localStorage.getItem("city");
-//   console.log(lastCitySearched);
-//   searchTicketmasterApi(lastCitySearched);
-//   console.log("Last searched city: " + lastCitySearched);
-// });
+document.addEventListener("DOMContentLoaded", function () {
+  let lastCitySearched = localStorage.getItem("city");
+  console.log(lastCitySearched);
+  searchTicketmasterApi(JSON.parse(lastCitySearched));
+  console.log("Last searched city: " + lastCitySearched);
+});
 
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
@@ -157,12 +141,6 @@ function initMap() {
 
   console.log("map info: ", map);
 }
-
-// function showEvents(json) {
-//   for (var i = 0; i < json.page.size; i++) {
-//     $("#events").append("<p>" + json._embedded.events[i].name + "</p>");
-//   }
-// }
 
 function populateGoogleMaps(data) {
   let events = data._embedded.events;
@@ -187,35 +165,17 @@ function populateGoogleMaps(data) {
 
     // add onclick function to marker
     marker.addListener("click", () => {
+      let eventModalEl = document.getElementById("eventModalEl");
+      let venueModalEl = document.getElementById("venueModalEl");
+      let lineupModalEl = document.getElementById("lineupModalEl");
+      let additionalModalEl = document.getElementById("additionalModalEl");
       console.log("Marker clicked!");
       // add functionality here. Just gonna add remove hidden class for now.
       modal.classList.remove("hidden");
+      eventModalEl.textContent = venue.name;
+      venueModalEl.textContent = venue.name;
+      lineupModalEl.textContent = venue.name;
+      additionalModalEl.textContent = venue.name;
     });
   });
 }
-
-// addEventListener("click", function (data) {
-
-//   for (let i = 0; i < 25; i++) {
-//     let marker = new google.maps.Marker({
-//       position: { lat: venueLat[i], lng: venueLong[i] },
-//       map: map,
-//     });
-//   }
-// });
-
-// for (var i = 0; i < json.page.size; i++) {
-//   addMarker(map, json._embedded.events[i]);
-// }
-
-// function addMarker(map, event) {
-//   var marker = new google.maps.Marker({
-//     position: new google.maps.LatLng(
-//       event._embedded.venues[0].location.latitude,
-//       event._embedded.venues[0].location.longitude
-//     ),
-//     map: map,
-//   });
-//   marker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-//   console.log(marker);
-// }
