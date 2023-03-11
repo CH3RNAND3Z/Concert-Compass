@@ -88,6 +88,8 @@ function createEventCard(event) {
   const eventLocation = event._embedded.venues[0].name;
   const eventImage = event.images[0].url;
   const eventUrl = event.url;
+  const eventLineup = event._embedded.attractions.map((attraction) => attraction.name).join(', ');
+
 
   const formattedDate = formatDate(eventDate);
 
@@ -118,16 +120,23 @@ function createEventCard(event) {
   eventNameEl.classList.add("text-lg", "font-bold", "mb-2");
   eventNameEl.textContent = eventName;
   eventCard.appendChild(eventNameEl);
-
+  
+  const eventLineupEl = document.createElement("p");
+  eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
+  eventLineupEl.textContent = `Lineup: ${eventLineup}`;
+  eventCard.appendChild(eventLineupEl);
+  
   const eventDateEl = document.createElement("p");
   eventDateEl.classList.add("text-gray-600", "text-base", "mb-2");
   eventDateEl.textContent = `Date: ${formattedDate}`;
   eventCard.appendChild(eventDateEl);
 
+
   const eventLocationEl = document.createElement("p");
   eventLocationEl.classList.add("text-gray-600", "text-base", "mb-2");
   eventLocationEl.textContent = `Location: ${eventLocation}`;
   eventCard.appendChild(eventLocationEl);
+
 
   const purchaseTicketsDiv = document.createElement("div");
   purchaseTicketsDiv.classList.add(
