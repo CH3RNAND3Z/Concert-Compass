@@ -65,9 +65,8 @@ function searchTicketmasterApi(cityInput) {
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log("Event Data: ",data);
       const events = data._embedded.events;
-      console.log(`Found ${events.length} events in ${cityInput}`);
 
       populateGoogleMaps(data);
 
@@ -89,9 +88,16 @@ function createEventCard(event) {
   const eventLocation = event._embedded.venues[0].name;
   const eventImage = event.images[0].url;
   const eventUrl = event.url;
-  const eventLineup = event._embedded.attractions
-    .map((band) => band.name)
-    .join(", ");
+  let eventLineup = "";
+  if (event._embedded.attractions && event._embedded.attractions.length > 0) {
+    for (let i = 0; i < event._embedded.attractions.length; i++) {
+      if (event._embedded.attractions[i].name) {
+        eventLineup +=
+          (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
+      }
+    }
+  }
+
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
@@ -122,12 +128,12 @@ function createEventCard(event) {
   eventNameEl.textContent = eventName;
   eventCard.appendChild(eventNameEl);
 
-  // *** ADD LINEUP INFO TO CARD. ****
-
-  const eventLineupEl = document.createElement("p");
-  eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
-  eventLineupEl.textContent = `Lineup: ${eventLineup}`;
-  eventCard.appendChild(eventLineupEl);
+  if (eventLineup.length > 0) {
+    const eventLineupEl = document.createElement("p");
+    eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
+    eventLineupEl.textContent = `Lineup: ${eventLineup}`;
+    eventCard.appendChild(eventLineupEl);
+  }
 
   const eventDateEl = document.createElement("p");
   eventDateEl.classList.add("text-gray-600", "text-base", "mb-2");
@@ -174,7 +180,6 @@ function populateGoogleMaps(data) {
   let events = data._embedded.events;
   let cityLat = JSON.parse(events[0]._embedded.venues[0].location.latitude);
   let cityLong = JSON.parse(events[0]._embedded.venues[0].location.longitude);
-  console.log(cityLat, cityLong);
   var mapDiv = document.getElementById("map");
   var map = new google.maps.Map(mapDiv, {
     center: { lat: cityLat, lng: cityLong },
@@ -204,9 +209,8 @@ function populateGoogleMaps(data) {
       addressModalEl.textContent = "";
       adaModalEl.textContent = "";
       parkingModalEl.textContent = "";
-      console.log("Marker clicked!");
 
-      // unhides modal and populates with specific venue information
+      // un-hides modal and populates with specific venue information
       modal.classList.remove("hidden");
 
       venueModalEl.textContent = "Welcome to " + venue.name;
