@@ -14,29 +14,7 @@ const apiKey = "S3hkm2FnFATqM68Z3lvSHRxUVozGGlHX";
 
 // date formatting
 function formatDate(eventDate) {
-  const adjustedDate = new Date(eventDate);
-  adjustedDate.setDate(adjustedDate.getDate() + 1);
-
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const suffixes = ["th", "st", "nd", "rd"];
-  const day = adjustedDate.getDate();
-  const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${
-    monthNames[eventDate.getMonth()]
-  } ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = dayjs(eventDate).add(1, "day").format("MMMM DD, YYYY");
   return formattedDate;
 }
 
@@ -96,7 +74,9 @@ function searchTicketmasterApi(cityInput) {
         adaModalEl.textContent = "";
         parkingModalEl.textContent = "";
         venueModalEl.textContent = "Please enter a valid city!";
-        document.getElementById("city").value = JSON.parse(localStorage.getItem("city"))
+        document.getElementById("city").value = JSON.parse(
+          localStorage.getItem("city")
+        );
       }
     })
     .catch((error) => console.error(error));
