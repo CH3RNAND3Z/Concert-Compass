@@ -4,6 +4,11 @@ const resultsContainer = document.getElementById("results-container");
 const modal = document.getElementById("popup-modal");
 const closeModalBtn = document.getElementById("close-modal-btn");
 
+let venueModalEl = document.getElementById("venueModalEl");
+let addressModalEl = document.getElementById("addressModalEl");
+let adaModalEl = document.getElementById("adaModalEl");
+let parkingModalEl = document.getElementById("parkingModalEl");
+
 // Ticketmaster API key
 const apiKey = "S3hkm2FnFATqM68Z3lvSHRxUVozGGlHX";
 
@@ -64,17 +69,29 @@ function searchTicketmasterApi(cityInput) {
     .then((response) => response.json())
     .then((data) => {
       console.log("Event Data: ", data);
-      const events = data._embedded.events;
 
-      populateGoogleMaps(data);
+      if (data._embedded) {
+        const events = data._embedded.events;
 
-      resultsContainer.classList.remove("hidden");
-      resultsContainer.innerHTML = "";
+        populateGoogleMaps(data);
 
-      events.forEach((event) => {
-        const eventCard = createEventCard(event);
-        resultsContainer.appendChild(eventCard);
-      });
+        resultsContainer.classList.remove("hidden");
+        resultsContainer.innerHTML = "";
+
+        events.forEach((event) => {
+          const eventCard = createEventCard(event);
+          resultsContainer.appendChild(eventCard);
+        });
+      } else {
+        console.log("Please enter a valid city!");
+        modal.classList.remove("hidden");
+        venueModalEl.textContent = "";
+        addressModalEl.textContent = "";
+        adaModalEl.textContent = "";
+        parkingModalEl.textContent = "";
+        venueModalEl.textContent = "Please enter a valid city!";
+        document.getElementById("city").value = "";
+      }
     })
     .catch((error) => console.error(error));
 }
@@ -176,11 +193,6 @@ function populateGoogleMaps(data) {
 
     // add onclick function to marker that opens modal
     marker.addListener("click", () => {
-      let venueModalEl = document.getElementById("venueModalEl");
-      let addressModalEl = document.getElementById("addressModalEl");
-      let adaModalEl = document.getElementById("adaModalEl");
-      let parkingModalEl = document.getElementById("parkingModalEl");
-
       //clears modal content upon click
       venueModalEl.textContent = "";
       addressModalEl.textContent = "";
