@@ -96,10 +96,7 @@ function searchTicketmasterApi(cityInput) {
         adaModalEl.textContent = "";
         parkingModalEl.textContent = "";
         venueModalEl.textContent = "Please enter a valid city!";
-        document.getElementById("city").value = "";
-        eventCard.appendChild(eventLineupEl);
-        let lastCitySearched = localStorage.getItem("city");
-        localStorage.setItem("city", null);
+        document.getElementById("city").value = JSON.parse(localStorage.getItem("city"))
       }
     })
     .catch((error) => console.error(error));
@@ -156,6 +153,7 @@ function createEventCard(event) {
     const eventLineupEl = document.createElement("p");
     eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
     eventLineupEl.textContent = `Lineup: ${eventLineup}`;
+    eventCard.appendChild(eventLineupEl);
   }
 
   const eventDateEl = document.createElement("p");
