@@ -14,6 +14,9 @@ const apiKey = "S3hkm2FnFATqM68Z3lvSHRxUVozGGlHX";
 
 // date formatting
 function formatDate(eventDate) {
+  const adjustedDate = new Date(eventDate);
+  adjustedDate.setDate(adjustedDate.getDate() + 1);
+
   const monthNames = [
     "January",
     "February",
@@ -29,9 +32,11 @@ function formatDate(eventDate) {
     "December",
   ];
   const suffixes = ["th", "st", "nd", "rd"];
-  const day = 1 + eventDate.getDate();
+  const day = adjustedDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${
+    monthNames[eventDate.getMonth()]
+  } ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
 
@@ -57,7 +62,6 @@ searchBtn.addEventListener("click", function (event) {
     return;
   }
 
-  localStorage.setItem("city", JSON.stringify(cityInput));
   searchTicketmasterApi(cityInput);
 });
 
@@ -72,11 +76,13 @@ function searchTicketmasterApi(cityInput) {
 
       if (data._embedded) {
         const events = data._embedded.events;
+        let cityInput = document.getElementById("city").value;
 
         populateGoogleMaps(data);
 
         resultsContainer.classList.remove("hidden");
         resultsContainer.innerHTML = "";
+        localStorage.setItem("city", JSON.stringify(cityInput));
 
         events.forEach((event) => {
           const eventCard = createEventCard(event);
@@ -91,6 +97,9 @@ function searchTicketmasterApi(cityInput) {
         parkingModalEl.textContent = "";
         venueModalEl.textContent = "Please enter a valid city!";
         document.getElementById("city").value = "";
+        eventCard.appendChild(eventLineupEl);
+        let lastCitySearched = localStorage.getItem("city");
+        localStorage.setItem("city", null);
       }
     })
     .catch((error) => console.error(error));
@@ -107,7 +116,8 @@ function createEventCard(event) {
   if (event._embedded.attractions && event._embedded.attractions.length > 0) {
     for (let i = 0; i < event._embedded.attractions.length; i++) {
       if (event._embedded.attractions[i].name) {
-        eventLineup += (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
+        eventLineup +=
+          (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
       }
     }
   }
@@ -115,10 +125,24 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6", "text-center");
+  eventCard.classList.add(
+    "rounded-lg",
+    "overflow-hidden",
+    "shadow-md",
+    "p-6",
+    "bg-white",
+    "mt-6",
+    "text-center"
+  );
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2", "event-image");
+  eventImageEl.classList.add(
+    "w-full",
+    "h-52",
+    "object-contain",
+    "mb-2",
+    "event-image"
+  );
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
@@ -132,7 +156,6 @@ function createEventCard(event) {
     const eventLineupEl = document.createElement("p");
     eventLineupEl.classList.add("text-gray-600", "text-base", "mb-2");
     eventLineupEl.textContent = `Lineup: ${eventLineup}`;
-    eventCard.appendChild(eventLineupEl);
   }
 
   const eventDateEl = document.createElement("p");
@@ -146,7 +169,13 @@ function createEventCard(event) {
   eventCard.appendChild(eventLocationEl);
 
   const purchaseTicketsDiv = document.createElement("div");
-  purchaseTicketsDiv.classList.add("mt-4", "flex", "flex-col", "max-w-xs", "mx-auto");
+  purchaseTicketsDiv.classList.add(
+    "mt-4",
+    "flex",
+    "flex-col",
+    "max-w-xs",
+    "mx-auto"
+  );
 
   const purchaseTicketsBtn = document.createElement("a");
   purchaseTicketsBtn.classList.add(
@@ -204,14 +233,22 @@ function populateGoogleMaps(data) {
 
       venueModalEl.textContent = "Welcome to " + venue.name;
       addressModalEl.textContent =
-        venue.address.line1 + ", " + venue.city.name + " " + venue.state.stateCode + ", " + venue.postalCode;
+        venue.address.line1 +
+        ", " +
+        venue.city.name +
+        " " +
+        venue.state.stateCode +
+        ", " +
+        venue.postalCode;
       if (venue.ada) {
-        adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones;
+        adaModalEl.textContent =
+          "Phone number for ADA ticketing: " + venue.ada.adaPhones;
       } else {
         console.log("No ADA Information");
       }
       if (venue.parkingDetail) {
-        parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
+        parkingModalEl.textContent =
+          "Parking information: " + venue.parkingDetail;
       } else {
         console.log("No Parking Information");
       }
@@ -227,8 +264,13 @@ closeModalBtn.addEventListener("click", () => {
 // upon reload, populate page with last city searched
 document.addEventListener("DOMContentLoaded", function () {
   let lastCitySearched = localStorage.getItem("city");
+
   console.log(lastCitySearched);
-  searchTicketmasterApi(JSON.parse(lastCitySearched));
-  document.getElementById("city").value = JSON.parse(lastCitySearched);
+
+  if (lastCitySearched !== null) {
+    searchTicketmasterApi(JSON.parse(lastCitySearched));
+    document.getElementById("city").value = JSON.parse(lastCitySearched);
+  }
+
   console.log("Last searched city: " + lastCitySearched);
 });
