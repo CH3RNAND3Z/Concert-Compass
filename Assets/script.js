@@ -26,9 +26,7 @@ function formatDate(eventDate) {
   const suffixes = ["th", "st", "nd", "rd"];
   const day = 1 + eventDate.getDate();
   const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0];
-  const formattedDate = `${
-    monthNames[eventDate.getMonth()]
-  } ${day}${suffix}, ${eventDate.getFullYear()}`;
+  const formattedDate = `${monthNames[eventDate.getMonth()]} ${day}${suffix}, ${eventDate.getFullYear()}`;
   return formattedDate;
 }
 
@@ -65,7 +63,7 @@ function searchTicketmasterApi(cityInput) {
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Event Data: ",data);
+      console.log("Event Data: ", data);
       const events = data._embedded.events;
 
       populateGoogleMaps(data);
@@ -92,8 +90,7 @@ function createEventCard(event) {
   if (event._embedded.attractions && event._embedded.attractions.length > 0) {
     for (let i = 0; i < event._embedded.attractions.length; i++) {
       if (event._embedded.attractions[i].name) {
-        eventLineup +=
-          (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
+        eventLineup += (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
       }
     }
   }
@@ -101,24 +98,10 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add(
-    "rounded-lg",
-    "overflow-hidden",
-    "shadow-md",
-    "p-6",
-    "bg-white",
-    "mt-6",
-    "text-center"
-  );
+  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6", "text-center");
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add(
-    "w-full",
-    "h-52",
-    "object-contain",
-    "mb-2",
-    "event-image"
-  );
+  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2", "event-image");
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
@@ -146,13 +129,7 @@ function createEventCard(event) {
   eventCard.appendChild(eventLocationEl);
 
   const purchaseTicketsDiv = document.createElement("div");
-  purchaseTicketsDiv.classList.add(
-    "mt-4",
-    "flex",
-    "flex-col",
-    "max-w-xs",
-    "mx-auto"
-  );
+  purchaseTicketsDiv.classList.add("mt-4", "flex", "flex-col", "max-w-xs", "mx-auto");
 
   const purchaseTicketsBtn = document.createElement("a");
   purchaseTicketsBtn.classList.add(
@@ -215,15 +192,17 @@ function populateGoogleMaps(data) {
 
       venueModalEl.textContent = "Welcome to " + venue.name;
       addressModalEl.textContent =
-        venue.address.line1 +
-        ", " +
-        venue.city.name +
-        " " +
-        venue.state.stateCode +
-        ", " +
-        venue.postalCode;
-      // adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones
-      // parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
+        venue.address.line1 + ", " + venue.city.name + " " + venue.state.stateCode + ", " + venue.postalCode;
+      if (venue.ada) {
+        adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones;
+      } else {
+        console.log("No ADA Information");
+      }
+      if (venue.parkingDetail) {
+        parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
+      } else {
+        console.log("No Parking Information");
+      }
     });
   });
 }
