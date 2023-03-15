@@ -52,31 +52,31 @@ function searchTicketmasterApi(cityInput) {
     .then((data) => {
       console.log("Event Data: ", data);
 
+      // if event data exists, run through normal functions
       if (data._embedded) {
         const events = data._embedded.events;
-        let cityInput = document.getElementById("city").value;
+
+        localStorage.setItem("city", JSON.stringify(cityInput));
 
         populateGoogleMaps(data);
 
         resultsContainer.classList.remove("hidden");
         resultsContainer.innerHTML = "";
-        localStorage.setItem("city", JSON.stringify(cityInput));
 
         events.forEach((event) => {
           const eventCard = createEventCard(event);
           resultsContainer.appendChild(eventCard);
         });
+
+        // if event data doesn't exist, populate error modal
       } else {
         console.log("Please enter a valid city!");
         modal.classList.remove("hidden");
-        venueModalEl.textContent = "";
         addressModalEl.textContent = "";
         adaModalEl.textContent = "";
         parkingModalEl.textContent = "";
         venueModalEl.textContent = "Please enter a valid city!";
-        document.getElementById("city").value = JSON.parse(
-          localStorage.getItem("city")
-        );
+        document.getElementById("city").value = JSON.parse(localStorage.getItem("city"));
       }
     })
     .catch((error) => console.error(error));
@@ -93,8 +93,7 @@ function createEventCard(event) {
   if (event._embedded.attractions && event._embedded.attractions.length > 0) {
     for (let i = 0; i < event._embedded.attractions.length; i++) {
       if (event._embedded.attractions[i].name) {
-        eventLineup +=
-          (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
+        eventLineup += (i === 0 ? "" : ", ") + event._embedded.attractions[i].name;
       }
     }
   }
@@ -102,24 +101,10 @@ function createEventCard(event) {
   const formattedDate = formatDate(eventDate);
 
   const eventCard = document.createElement("div");
-  eventCard.classList.add(
-    "rounded-lg",
-    "overflow-hidden",
-    "shadow-md",
-    "p-6",
-    "bg-white",
-    "mt-6",
-    "text-center"
-  );
+  eventCard.classList.add("rounded-lg", "overflow-hidden", "shadow-md", "p-6", "bg-white", "mt-6", "text-center");
 
   const eventImageEl = document.createElement("img");
-  eventImageEl.classList.add(
-    "w-full",
-    "h-52",
-    "object-contain",
-    "mb-2",
-    "event-image"
-  );
+  eventImageEl.classList.add("w-full", "h-52", "object-contain", "mb-2", "event-image");
   eventImageEl.src = eventImage;
   eventImageEl.alt = eventName;
   eventCard.appendChild(eventImageEl);
@@ -147,13 +132,7 @@ function createEventCard(event) {
   eventCard.appendChild(eventLocationEl);
 
   const purchaseTicketsDiv = document.createElement("div");
-  purchaseTicketsDiv.classList.add(
-    "mt-4",
-    "flex",
-    "flex-col",
-    "max-w-xs",
-    "mx-auto"
-  );
+  purchaseTicketsDiv.classList.add("mt-4", "flex", "flex-col", "max-w-xs", "mx-auto");
 
   const purchaseTicketsBtn = document.createElement("a");
   purchaseTicketsBtn.classList.add(
@@ -211,22 +190,14 @@ function populateGoogleMaps(data) {
 
       venueModalEl.textContent = "Welcome to " + venue.name;
       addressModalEl.textContent =
-        venue.address.line1 +
-        ", " +
-        venue.city.name +
-        " " +
-        venue.state.stateCode +
-        ", " +
-        venue.postalCode;
+        venue.address.line1 + ", " + venue.city.name + " " + venue.state.stateCode + ", " + venue.postalCode;
       if (venue.ada) {
-        adaModalEl.textContent =
-          "Phone number for ADA ticketing: " + venue.ada.adaPhones;
+        adaModalEl.textContent = "Phone number for ADA ticketing: " + venue.ada.adaPhones;
       } else {
         console.log("No ADA Information");
       }
       if (venue.parkingDetail) {
-        parkingModalEl.textContent =
-          "Parking information: " + venue.parkingDetail;
+        parkingModalEl.textContent = "Parking information: " + venue.parkingDetail;
       } else {
         console.log("No Parking Information");
       }
@@ -242,8 +213,6 @@ closeModalBtn.addEventListener("click", () => {
 // upon reload, populate page with last city searched
 document.addEventListener("DOMContentLoaded", function () {
   let lastCitySearched = localStorage.getItem("city");
-
-  console.log(lastCitySearched);
 
   if (lastCitySearched !== null) {
     searchTicketmasterApi(JSON.parse(lastCitySearched));
